@@ -1,5 +1,5 @@
+@preconcurrency import EventKit
 import AppKit
-import EventKit
 import Foundation
 
 actor CalendarService: CalendarServiceProtocol {
