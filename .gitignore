@@ -1,0 +1,31 @@
+# Xcode
+.DS_Store
+*.xcuserdata
+*.xcworkspace
+DerivedData/
+*.xcode-version
+
+# Swift Package Manager
+.build/
+Packages/
+.swiftpm/xcuserdata/
+.swiftpm/workspace.json
+
+# Build
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temp
+tmp/
+temp/
+
+# Icon generation artifact
+scripts/icon_1024.png

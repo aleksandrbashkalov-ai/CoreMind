@@ -1,0 +1,42 @@
+# CoreMind SwiftLint Configuration
+# Based on swiftlint defaults with project-specific adjustments
+
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  - identifier_name
+  - force_cast
+  - force_try
+  - implicit_return
+  - redundant_nil_coalescing
+  - empty_count
+  - empty_string
+  - nesting
+  - type_body_length
+  - file_length
+  - function_body_length
+  - cyclomatic_complexity
+  - multiple_closures_with_trailing_closure
+
+opt_in_rules:
+  - explicit_init
+  - first_where
+  - force_unwrapping
+  - multiline_literal_brackets
+  - overridden_super_call
+  - empty_xctest_method
+  - missing_docs
+
+included:
+  - Sources
+
+excluded:
+  - .build
+  - build
+  - Tests
+
+analyzer_rules:
+  - explicit_self
+  - unused_import
+
+reporter: "xcode"

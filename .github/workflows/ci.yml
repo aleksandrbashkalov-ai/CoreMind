@@ -1,0 +1,78 @@
+name: CoreMind CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: "5.10"
+
+    - name: Cache Swift Package Manager
+      uses: actions/cache@v4
+      with:
+        path: |
+          .build
+          ~/Library/Caches/org.swift.swiftpm
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+
+    - name: Resolve Dependencies
+      run: swift package resolve
+
+    - name: Build
+      run: swift build -c release
+
+    - name: Run Tests
+      run: swift test --parallel
+
+    - name: SwiftLint
+      if: hashFiles('.swiftlint.yml') != ''
+      run: |
+        if command -v swiftlint &> /dev/null; then
+          swiftlint lint --strict
+        else
+          echo "SwiftLint not installed, skipping..."
+        fi
+
+  release:
+    needs: build-and-test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: "5.10"
+
+    - name: Build Release
+      run: swift build -c release --arch arm64 --arch x86_64
+
+    - name: Create App Bundle
+      run: chmod +x scripts/release.sh && ./scripts/release.sh
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: build/CoreMind.app
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
