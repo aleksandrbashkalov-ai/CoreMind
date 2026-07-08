@@ -1,7 +1,7 @@
 @preconcurrency import ApplicationServices
 import AppKit
 import Foundation
-import UserNotifications
+@preconcurrency import UserNotifications
 
 struct PermissionState: Codable, Sendable {
     var accessibility: Bool

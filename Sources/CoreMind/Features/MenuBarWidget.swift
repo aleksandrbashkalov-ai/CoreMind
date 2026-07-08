@@ -1,5 +1,5 @@
 import SwiftUI
-import EventKit
+@preconcurrency import EventKit
 
 enum CoreMindView: String, CaseIterable {
     case home = "Home"
