@@ -1516,7 +1516,7 @@ final class FailingAIProvider: AIProviderProtocol {
 
 // MARK: - Mock Implementations
 
-final class MockDatabaseService: DatabaseServiceProtocol {
+final class MockDatabaseService: DatabaseServiceProtocol, @unchecked Sendable {
     private var advice: [CoachingAdvice] = []
     private var checkIns: [MoodCheckIn] = []
 
@@ -1574,7 +1574,7 @@ final class MockWellnessEngine: WellnessEngineProtocol {
     func getContextualSuggestion(currentApp: String, activeMinutes: TimeInterval) async -> String { "Keep focused." }
 }
 
-final class MockCalendarService: CalendarServiceProtocol {
+final class MockCalendarService: CalendarServiceProtocol, @unchecked Sendable {
     var _hasAccess: Bool = false
     var _requestAccessResult: Bool = false
     var _currentEvents: [EKEvent] = []
@@ -1621,7 +1621,7 @@ final class MockCreativeBreakService: CreativeBreakServiceProtocol {
     func prompts(for category: CreativeCategory) async -> [CreativePrompt] { [] }
 }
 
-final class MockAIProvider: AIProviderProtocol {
+final class MockAIProvider: AIProviderProtocol, @unchecked Sendable {
     var isAvailable: Bool { false }
     var mockResponse: String = "AI response"
     func initialize() async {}
@@ -1635,7 +1635,7 @@ final class MockAIProvider: AIProviderProtocol {
 
 /// Mock LocalAI provider that conforms to the internal `AIProvider` protocol.
 /// Used to inject into `AIOrchestrator(localProvider:)` for testing.
-final class MockLocalProvider: AIProvider {
+final class MockLocalProvider: AIProvider, @unchecked Sendable {
     let tier: AIModelTier = .onDevice
     var isAvailable: Bool = true
     var mockResponse: String = "mock response"
