@@ -47,7 +47,7 @@ final class SettingsStore {
 
 // MARK: - Environment
 
-struct SettingsStoreKey: EnvironmentKey {
+struct SettingsStoreKey: @preconcurrency EnvironmentKey {
     @MainActor static let defaultValue = SettingsStore.shared
 }
 
