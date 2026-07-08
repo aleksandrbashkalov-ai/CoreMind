@@ -1,5 +1,5 @@
+@preconcurrency import ApplicationServices
 import AppKit
-import ApplicationServices
 import Foundation
 import UserNotifications
 
