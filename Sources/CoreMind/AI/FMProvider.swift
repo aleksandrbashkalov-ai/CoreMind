@@ -4,7 +4,7 @@ import Foundation
 // Conditional compilation allows building on older macOS while supporting FM on newer systems
 
 #if canImport(FoundationModels)
-import FoundationModels
+@preconcurrency import FoundationModels
 
 @available(macOS 26, *)
 // Thread safety: called exclusively through AIOrchestrator actor.
@@ -13,7 +13,7 @@ final class FMProvider: AIProvider, @unchecked Sendable {
     let tier: AIModelTier
     var isAvailable: Bool { isModelAvailable }
 
-    private var model: (any LanguageModel)?
+    private var model: SystemLanguageModel?
     private var session: LanguageModelSession?
     private var isModelAvailable = false
 
@@ -23,19 +23,16 @@ final class FMProvider: AIProvider, @unchecked Sendable {
     }
 
     private func setupModel() {
-        switch tier {
-        case .onDevice:
-            model = SystemLanguageModel()
-        case .cloud:
-            if #available(macOS 27, *) {
-                model = PrivateCloudComputeLanguageModel()
-            } else {
-                model = SystemLanguageModel()
-            }
+        #if os(macOS)
+        if #available(macOS 27, *) {
+            // PrivateCloudComputeLanguageModel available on macOS 27+
+            // For now, fall back to SystemLanguageModel
         }
+        #endif
 
+        model = SystemLanguageModel()
         if let model = model {
-            session = LanguageModelSession(model: model)
+            session = LanguageModelSession()
             isModelAvailable = true
         }
     }
