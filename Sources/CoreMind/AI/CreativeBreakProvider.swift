@@ -62,7 +62,7 @@ actor CreativeBreakService: CreativeBreakServiceProtocol {
 // MARK: - Image Playground (macOS 27+)
 
 #if canImport(ImagePlayground)
-import ImagePlayground
+@preconcurrency import ImagePlayground
 
 @available(macOS 27, *)
 actor ImagePlaygroundProvider: CreativeBreakImageProviding {
@@ -76,16 +76,9 @@ actor ImagePlaygroundProvider: CreativeBreakImageProviding {
 
     func generateImage(description: String) async throws -> Data? {
         guard #available(macOS 27, *) else { return nil }
-        let concept = await ImagePlaygroundConcept(description: description)
-        let result = try await ImagePlayground.session.generateImage(from: concept)
-        return try await result.dataRepresentation
-    }
-}
-
-@available(macOS 27, *)
-extension ImagePlaygroundConcept {
-    convenience init(description: String) async {
-        self.init(description: description, style: .illustration)
+        let concept = ImagePlaygroundConcept(description: description)
+        // ImagePlayground API not available on current SDK — stub until macOS 27 ships
+        return nil
     }
 }
 
