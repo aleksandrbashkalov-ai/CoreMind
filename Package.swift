@@ -22,14 +22,14 @@ let package = Package(
             path: "Sources/CoreMind",
             resources: [.process("Resources")],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
+                .swiftLanguageVersion(.v6),
             ]
         ),
         .testTarget(
             name: "CoreMindTests",
             dependencies: ["CoreMind"],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
+                .swiftLanguageVersion(.v6),
             ]
         ),
     ]
