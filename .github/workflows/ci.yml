@@ -12,13 +12,13 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Show Swift version
       run: swift --version
 
     - name: Cache Swift Package Manager
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           .build
@@ -54,7 +54,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Show Swift version
       run: swift --version
@@ -66,7 +66,7 @@ jobs:
       run: chmod +x scripts/release.sh && ./scripts/release.sh
 
     - name: Create Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         files: build/CoreMind.app
         generate_release_notes: true
