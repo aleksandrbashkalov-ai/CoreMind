@@ -101,7 +101,7 @@ final class AppDependencies {
     }
 }
 
-struct AppDependenciesKey: EnvironmentKey {
+struct AppDependenciesKey: @preconcurrency EnvironmentKey {
     @MainActor static let defaultValue = AppDependencies()
 }
 
