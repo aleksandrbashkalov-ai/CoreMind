@@ -3,8 +3,8 @@ import Foundation
 
 @available(macOS 14, *)
 struct StartFocusSessionIntent: AppIntent {
-    static var title: LocalizedStringResource = "Start Focus Session"
-    static var description: IntentDescription = "Begin a focus or pomodoro session"
+    static let title: LocalizedStringResource = "Start Focus Session"
+    static let description: IntentDescription = "Begin a focus or pomodoro session"
 
     @Parameter(title: "Minutes", default: 25, inclusiveRange: (1, 240))
     var minutes: Int
@@ -35,8 +35,8 @@ struct StartFocusSessionIntent: AppIntent {
 
 @available(macOS 14, *)
 struct LogMoodIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Mood Check-In"
-    static var description: IntentDescription = "Record how you're feeling"
+    static let title: LocalizedStringResource = "Log Mood Check-In"
+    static let description: IntentDescription = "Record how you're feeling"
 
     @Parameter(title: "Mood", default: "Okay")
     var mood: String
@@ -68,8 +68,8 @@ struct LogMoodIntent: AppIntent {
 
 @available(macOS 14, *)
 struct StartBreathingIntent: AppIntent {
-    static var title: LocalizedStringResource = "Start Breathing Exercise"
-    static var description: IntentDescription = "Begin a guided breathing session"
+    static let title: LocalizedStringResource = "Start Breathing Exercise"
+    static let description: IntentDescription = "Begin a guided breathing session"
 
     @Parameter(title: "Exercise", default: "Box Breathing")
     var exercise: String
@@ -84,8 +84,8 @@ struct StartBreathingIntent: AppIntent {
 
 @available(macOS 14, *)
 struct GetDailyInsightIntent: AppIntent {
-    static var title: LocalizedStringResource = "Get Daily Insight"
-    static var description: IntentDescription = "See your focus and wellness summary"
+    static let title: LocalizedStringResource = "Get Daily Insight"
+    static let description: IntentDescription = "See your focus and wellness summary"
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
