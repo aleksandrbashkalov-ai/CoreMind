@@ -14,8 +14,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v7
 
-    - name: Show Swift version
-      run: swift --version
+    - name: Check Swift version (require 6.0+)
+      run: |
+        version=$(swift --version | head -1 | grep -oE 'version [0-9]+' | grep -oE '[0-9]+')
+        echo "Swift version: $(swift --version | head -1)"
+        if [ "$version" -lt 6 ]; then
+          echo "❌ Swift 6.0+ required, found $version"
+          exit 1
+        fi
+        echo "✅ Swift 6.0+ OK"
 
     - name: Cache Swift Package Manager
       uses: actions/cache@v6
@@ -56,8 +63,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v7
 
-    - name: Show Swift version
-      run: swift --version
+    - name: Check Swift version (require 6.0+)
+      run: |
+        version=$(swift --version | head -1 | grep -oE 'version [0-9]+' | grep -oE '[0-9]+')
+        echo "Swift version: $(swift --version | head -1)"
+        if [ "$version" -lt 6 ]; then
+          echo "❌ Swift 6.0+ required, found $version"
+          exit 1
+        fi
+        echo "✅ Swift 6.0+ OK"
 
     - name: Build Release
       run: swift build -c release --arch arm64 --arch x86_64
