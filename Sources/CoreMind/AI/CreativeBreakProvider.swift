@@ -17,11 +17,11 @@ enum CreativeCategory: String, Sendable, CaseIterable {
 
     var icon: String {
         switch self {
-        case .visual: return "🎨"
-        case .writing: return "✍️"
-        case .mindfulness: return "🧘"
-        case .music: return "🎵"
-        case .nature: return "🌿"
+        case .visual: return "\u{1F3A8}"
+        case .writing: return "\u{270D}\u{FE0F}"
+        case .mindfulness: return "\u{1F9D8}"
+        case .music: return "\u{1F3B5}"
+        case .nature: return "\u{1F33F}"
         }
     }
 }
@@ -70,15 +70,11 @@ actor ImagePlaygroundProvider: CreativeBreakImageProviding {
 
     private init() {}
 
-    nonisolated var isAvailable: Bool {
-        true
-    }
+    nonisolated var isAvailable: Bool { true }
 
     func generateImage(description: String) async throws -> Data? {
-        guard #available(macOS 27, *) else { return nil }
-        let concept = ImagePlaygroundConcept(description: description)
-        // ImagePlayground API not available on current SDK — stub until macOS 27 ships
-        return nil
+        // ImagePlaygroundConcept initializer not accessible on macOS 26.5 SDK — stub until macOS 27 ships
+        nil
     }
 }
 
