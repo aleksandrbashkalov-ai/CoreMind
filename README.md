@@ -2,6 +2,10 @@
 
 > Minimal, thoughtful macOS app for focus, reflection, and mental clarity.
 
+<p align="center">
+  <img src="logo.svg" alt="CoreMind" width="96">
+</p>
+
 [![Swift 5.10](https://img.shields.io/badge/Swift-5.10-FA7343?logo=swift&logoColor=white)](https://swift.org)
 [![macOS 14+](https://img.shields.io/badge/macOS-14+-lightgrey?logo=apple&logoColor=white)](https://developer.apple.com/macos)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
