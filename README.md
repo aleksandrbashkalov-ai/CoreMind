@@ -14,17 +14,17 @@
 
 ---
 
-## 📋 Зміст
+## Table of Contents
 
-- [Огляд (Overview)](#overview)
-- [Які проблеми вирішує CoreMind](#core-problems-coremind-solves)
-- [Можливості (Features)](#features)
-- [Встановлення (Installation)](#installation)
-- [Системні вимоги (System Requirements)](#system-requirements)
-- [З чого зроблено (Built With)](#built-with)
-- [Структура проєкту (Project Structure)](#project-structure)
-- [Як допомогти (Contributing)](#contributing)
-- [Ліцензія (License)](#license)
+- [Overview](#overview)
+- [Problems CoreMind Solves](#core-problems-coremind-solves)
+- [Features](#features)
+- [Installation](#installation)
+- [System Requirements](#system-requirements)
+- [Built With](#built-with)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
@@ -148,15 +148,15 @@ dependencies: [
   <img src="https://img.shields.io/badge/macOS_14+-lightgrey?style=flat-square&logo=apple" alt="macOS 14+">
 </p>
 
-| Категорія | Технологія |
-|-----------|-----------|
-| Мова | Swift 5.10 |
+| Category | Technology |
+|----------|-----------|
+| Language | Swift 5.10 |
 | UI | SwiftUI |
-| База даних | GRDB (SQLite) |
-| Архітектура | MVVM + Dependency Injection |
-| AI-провайдери | Ollama / Anthropic / OpenAI (pluggable) |
-| Монетизація | StoreKit 2 (опціональна Pro підписка) |
-| Мінімальна версія | macOS 14.0 |
+| Database | GRDB (SQLite) |
+| Architecture | MVVM + Dependency Injection |
+| AI Providers | Ollama / Anthropic / OpenAI (pluggable) |
+| Monetization | StoreKit 2 (optional Pro subscription) |
+| Min Deployment | macOS 14.0 |
 
 ## Project Structure
 
