@@ -10,6 +10,20 @@
 
 ---
 
+## 📋 Зміст
+
+- [Огляд (Overview)](#overview)
+- [Які проблеми вирішує CoreMind](#core-problems-coremind-solves)
+- [Можливості (Features)](#features)
+- [Встановлення (Installation)](#installation)
+- [Системні вимоги (System Requirements)](#system-requirements)
+- [З чого зроблено (Built With)](#built-with)
+- [Структура проєкту (Project Structure)](#project-structure)
+- [Як допомогти (Contributing)](#contributing)
+- [Ліцензія (License)](#license)
+
+---
+
 ## Overview
 
 CoreMind is a native macOS app designed to help you stay focused, build mindful habits, and reflect on your mental state throughout the day. It combines practical productivity tools — focus timers, mood check-ins, journaling — with Stoic wisdom and optional AI-powered coaching to create a complete mental wellness companion that lives in your menu bar.
@@ -115,17 +129,30 @@ dependencies: [
 - ~50 MB disk space for the app
 - No internet connection required for core functionality
 
-## Tech Stack
+## Built With
 
-| Layer | Technology |
-|-------|-----------|
-| Language | Swift 5.10 |
+<p align="center">
+  <img src="https://img.shields.io/badge/Swift-5.10-FA7343?style=flat-square&logo=swift" alt="Swift">
+  <img src="https://img.shields.io/badge/SwiftUI-FA7343?style=flat-square&logo=swift&labelColor=FA7343" alt="SwiftUI">
+  <img src="https://img.shields.io/badge/GRDB_(SQLite)-003B57?style=flat-square&logo=sqlite" alt="GRDB">
+  <img src="https://img.shields.io/badge/MVVM-3178C6?style=flat-square" alt="MVVM">
+  <img src="https://img.shields.io/badge/StoreKit_2-FF9500?style=flat-square&logo=apple" alt="StoreKit 2">
+  <br>
+  <img src="https://img.shields.io/badge/Ollama-000000?style=flat-square&logo=ollama" alt="Ollama">
+  <img src="https://img.shields.io/badge/Anthropic-191919?style=flat-square&logo=anthropic" alt="Anthropic">
+  <img src="https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai" alt="OpenAI">
+  <img src="https://img.shields.io/badge/macOS_14+-lightgrey?style=flat-square&logo=apple" alt="macOS 14+">
+</p>
+
+| Категорія | Технологія |
+|-----------|-----------|
+| Мова | Swift 5.10 |
 | UI | SwiftUI |
-| Database | GRDB (SQLite) |
-| Architecture | MVVM + Dependency Injection |
-| AI | Ollama / Anthropic / OpenAI (pluggable) |
-| Monetization | StoreKit 2 (optional Pro subscription) |
-| Min Deployment | macOS 14.0 |
+| База даних | GRDB (SQLite) |
+| Архітектура | MVVM + Dependency Injection |
+| AI-провайдери | Ollama / Anthropic / OpenAI (pluggable) |
+| Монетизація | StoreKit 2 (опціональна Pro підписка) |
+| Мінімальна версія | macOS 14.0 |
 
 ## Project Structure
 
