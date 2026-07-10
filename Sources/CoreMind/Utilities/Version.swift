@@ -3,4 +3,4 @@
 // Updated by release script
 
 struct Version {
-    static let version = "1.0.0"}
+    static let version = "1.1.0"}
