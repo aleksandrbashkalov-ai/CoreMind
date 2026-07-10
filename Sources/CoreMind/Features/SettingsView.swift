@@ -221,40 +221,138 @@ struct SettingsView: View {
 
     // MARK: - About
 
+    @State private var updateService = UpdateService.shared
+
     private var aboutTab: some View {
-        VStack(spacing: Spacing.xl) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: Spacing.xl) {
+                Spacer()
 
-            Image(systemName: "brain.head.profile")
-                .font(.system(size: 48))
-                .foregroundColor(.cmPrimary)
-                .accessibilityHidden(true)
+                Image(systemName: "brain.head.profile")
+                    .font(.system(size: 48))
+                    .foregroundColor(.cmPrimary)
+                    .accessibilityHidden(true)
 
-            Text("CoreMind")
-                .font(.system(size: 20, weight: .bold))
-                .accessibilityAddTraits(.isHeader)
+                Text("CoreMind")
+                    .font(.system(size: 20, weight: .bold))
+                    .accessibilityAddTraits(.isHeader)
 
-            Text("v\(Constants.appVersion)")
-                .captionFont()
-                .foregroundColor(.textTertiary)
+                Text("v\(Constants.appVersion)")
+                    .captionFont()
+                    .foregroundColor(.textTertiary)
 
-            Text("Your mindful productivity companion.\nTrack focus, build habits, stay balanced.")
-                .bodyFont()
-                .foregroundColor(.textSecondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, Spacing.xl)
+                Text("Your mindful productivity companion.\nTrack focus, build habits, stay balanced.")
+                    .bodyFont()
+                    .foregroundColor(.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, Spacing.xl)
 
-            Spacer()
+                // MARK: Updates Section
+                BrandDivider()
 
-            Text(Constants.appBundleID)
-                .smallFont()
-                .foregroundColor(.textTertiary)
+                VStack(alignment: .leading, spacing: Spacing.md) {
+                    Text("Updates")
+                        .headlineFont()
+                        .accessibilityAddTraits(.isHeader)
 
-            Spacer()
+                    if updateService.isChecking {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                            Text("Checking for updates...")
+                                .smallFont()
+                                .foregroundColor(.textSecondary)
+                        }
+                    }
+
+                    HStack {
+                        if updateService.updateAvailable {
+                            Label("Update Available (v\(updateService.latestVersion ?? ""))",
+                                  systemImage: "arrow.down.circle.fill")
+                                .foregroundColor(.blue)
+                        } else if updateService.lastCheckResult != nil {
+                            Label(updateService.lastCheckResult ?? "",
+                                  systemImage: "checkmark.circle.fill")
+                                .foregroundColor(.statusGreen)
+                        }
+                    }
+                    .smallFont()
+
+                    if let error = updateService.lastError {
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                            Text(error)
+                                .smallFont()
+                                .foregroundColor(.textSecondary)
+                        }
+                    }
+
+                    HStack(spacing: Spacing.sm) {
+                        Button("Check for Updates") {
+                            Task { await updateService.forceCheck() }
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .tint(.cmPrimary)
+                        .disabled(updateService.isChecking)
+
+                        if updateService.updateAvailable {
+                            Button("Download & Install") {
+                                Task {
+                                    do {
+                                        try await updateService.downloadAndInstall()
+                                    } catch {
+                                        updateService.lastError = error.localizedDescription
+                                    }
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.small)
+                            .tint(.cmPrimary)
+                            .disabled(updateService.isDownloading)
+                        }
+
+                        Button("Open GitHub") {
+                            updateService.openReleasePage()
+                        }
+                        .buttonStyle(.plain)
+                        .smallFont()
+                    }
+
+                    if updateService.isDownloading {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Downloading...")
+                                .smallFont()
+                            ProgressView(value: updateService.downloadProgress)
+                                .progressViewStyle(.linear)
+                        }
+                    }
+
+                    if let lastCheck = updateService.lastCheckDate {
+                        Text("Last checked: \(lastCheck.formatted(date: .abbreviated, time: .shortened))")
+                            .smallFont()
+                            .foregroundColor(.textTertiary)
+                    }
+                }
+                .padding(.horizontal)
+
+                Spacer()
+
+                Text(Constants.appBundleID)
+                    .smallFont()
+                    .foregroundColor(.textTertiary)
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
         .background(Color.surfacePrimary)
-        .accessibilityElement(children: .contain)
+        .task {
+            if updateService.lastCheckDate == nil {
+                await updateService.checkForUpdates()
+            }
+        }
     }
 
     // MARK: - Actions

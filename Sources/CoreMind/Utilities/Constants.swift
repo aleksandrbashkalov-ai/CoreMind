@@ -4,6 +4,8 @@ enum Constants {
     static let appName = "CoreMind"
     static let appBundleID = "com.coremind.app"
     static let appVersion = Version.version
+    /// GitHub repository for auto-updates (owner/repo)
+    static let githubRepo = "aleksandrbashkalov-ai/CoreMind"
 
     enum UserDefaultsKeys {
         static let useAI = "useAI"

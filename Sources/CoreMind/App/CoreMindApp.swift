@@ -44,6 +44,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         Task { await deps.initialize() }
         requestPermissions()
+        checkForUpdates()
+    }
+
+    private func checkForUpdates() {
+        Task {
+            await UpdateService.shared.checkForUpdates()
+        }
     }
 
     private var onboardingWindow: NSWindow?
