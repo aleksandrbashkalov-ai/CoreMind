@@ -36,7 +36,7 @@ struct CheckInView: View {
                     .headlineFont()
                 Spacer()
                 Image(systemName: "brain.head.profile")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
             }
 
             VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -47,14 +47,14 @@ struct CheckInView: View {
                             VStack(spacing: 2) {
                                 Text(mood.emoji).font(.title2)
                                 Text(mood.rawValue).smallFont()
-                                    .foregroundColor(selectedMood == mood ? .brandPurple : .textSecondary)
+                                    .foregroundColor(selectedMood == mood ? .cmPrimary : .textSecondary)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, Spacing.sm)
                             .background(
                                 Group {
                                     if selectedMood == mood {
-                                        LinearGradient.brandSubtle
+                                        Color.selectedBg
                                     } else {
                                         Color.clear
                                     }
@@ -63,7 +63,7 @@ struct CheckInView: View {
                             .cornerRadius(Radius.md)
                             .overlay(
                                 RoundedRectangle(cornerRadius: Radius.md)
-                                    .stroke(selectedMood == mood ? Color.brandPurple : Color.clear, lineWidth: 1)
+                                    .stroke(selectedMood == mood ? Color.cmPrimary : Color.clear, lineWidth: 1)
                             )
                         }
                         .buttonStyle(.plain)
@@ -82,14 +82,14 @@ struct CheckInView: View {
                             VStack(spacing: 2) {
                                 Text(energy.emoji).font(.title2)
                                 Text(energy.rawValue).smallFont()
-                                    .foregroundColor(selectedEnergy == energy ? .brandPurple : .textSecondary)
+                                    .foregroundColor(selectedEnergy == energy ? .cmPrimary : .textSecondary)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, Spacing.sm)
                             .background(
                                 Group {
                                     if selectedEnergy == energy {
-                                        LinearGradient.brandSubtle
+                                        Color.selectedBg
                                     } else {
                                         Color.clear
                                     }
@@ -98,7 +98,7 @@ struct CheckInView: View {
                             .cornerRadius(Radius.md)
                             .overlay(
                                 RoundedRectangle(cornerRadius: Radius.md)
-                                    .stroke(selectedEnergy == energy ? Color.brandPurple : Color.clear, lineWidth: 1)
+                                    .stroke(selectedEnergy == energy ? Color.cmPrimary : Color.clear, lineWidth: 1)
                             )
                         }
                         .buttonStyle(.plain)
@@ -114,7 +114,7 @@ struct CheckInView: View {
                     .captionFont()
                     .foregroundColor(.textSecondary)
                 Slider(value: $focusLevel, in: 1...10, step: 1)
-                    .tint(.brandPurple)
+                    .tint(.cmPrimary)
                     .accessibilityLabel("Focus level")
                     .accessibilityValue(Text("\(Int(focusLevel)) out of 10"))
             }
@@ -153,7 +153,7 @@ struct CheckInView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.brandPurple)
+                .tint(.cmPrimary)
                 .disabled(isLoading)
             }
         }
@@ -164,9 +164,9 @@ struct CheckInView: View {
     private var doneView: some View {
         VStack(spacing: Spacing.xl) {
             VStack(spacing: Spacing.xs) {
-                Image(systemName: "sparkles")
+                Image(systemName: "lightbulb")
                     .font(.system(size: 32))
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmAmber)
 
                 Text("Reflection")
                     .headlineFont()
@@ -200,8 +200,8 @@ struct CheckInView: View {
 
             if let action = suggestedAction {
                 HStack(spacing: Spacing.xs) {
-                    Image(systemName: "sparkle")
-                        .foregroundColor(.statusTeal)
+                    Image(systemName: "hand.point.up")
+                        .foregroundColor(.cmTeal)
                     Text(action)
                         .smallFont()
                         .foregroundColor(.textSecondary)
@@ -221,14 +221,14 @@ struct CheckInView: View {
                 }
                 .buttonStyle(.plain)
                 .bodyFont()
-                .foregroundColor(.brandPurple)
+                .foregroundColor(.cmPrimary)
 
                 Button("Done") {
                     isDone = false
                     resetForm()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.brandPurple)
+                .tint(.cmPrimary)
                 .controlSize(.small)
             }
         }

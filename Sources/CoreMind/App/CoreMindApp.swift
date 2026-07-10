@@ -28,7 +28,7 @@ struct CoreMindApp: App {
 }
 
 extension Color {
-    static let appAccent = Color.brandPurple
+    static let appAccent = Color.cmPrimary
 }
 
 @MainActor

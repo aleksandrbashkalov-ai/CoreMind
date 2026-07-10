@@ -5,7 +5,7 @@ struct FeatureRow<Content: View>: View {
     let iconColor: Color
     let content: Content
 
-    init(icon: String, iconColor: Color = .brandPurple, @ViewBuilder content: () -> Content) {
+    init(icon: String, iconColor: Color = .cmPrimary, @ViewBuilder content: () -> Content) {
         self.icon = icon
         self.iconColor = iconColor
         self.content = content()

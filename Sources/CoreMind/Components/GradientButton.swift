@@ -1,6 +1,8 @@
 import SwiftUI
 
-struct GradientButton: View {
+/// Primary action button — flat, filled, accessible.
+/// Replaces the old gradient button with a clean solid-color design.
+struct PrimaryButton: View {
     let title: String
     let icon: String?
     let action: () -> Void
@@ -18,7 +20,7 @@ struct GradientButton: View {
             .foregroundColor(.white)
             .padding(.horizontal, Spacing.lg)
             .padding(.vertical, 8)
-            .background(LinearGradient.brand)
+            .background(Color.cmPrimary)
             .cornerRadius(Radius.sm)
         }
         .buttonStyle(.plain)
@@ -27,6 +29,7 @@ struct GradientButton: View {
     }
 }
 
+/// Secondary ghost button — subtle, outline-style.
 struct GhostButton: View {
     let title: String
     let action: () -> Void
@@ -35,10 +38,10 @@ struct GhostButton: View {
         Button(action: action) {
             Text(title)
                 .captionFont()
-                .foregroundColor(.brandPurple)
+                .foregroundColor(.cmPrimary)
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, 6)
-                .background(Color.brandPurple.opacity(0.08))
+                .background(Color.cmPrimary.opacity(0.08))
                 .cornerRadius(Radius.sm)
         }
         .buttonStyle(.plain)

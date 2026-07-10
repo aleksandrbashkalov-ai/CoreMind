@@ -57,11 +57,11 @@ actor WellnessEngine: WellnessEngineProtocol {
 
     private func generateFallbackReflection(for checkIn: MoodCheckIn) -> String {
         if checkIn.mood == .terrible || checkIn.mood == .bad {
-            return "This feeling is valid. Be gentle with yourself today. Sometimes the bravest thing you can do is rest."
+            return "Rough days are part of the terrain. You don't have to solve everything — just showing up counts."
         } else if checkIn.mood == .great || checkIn.mood == .good {
-            return "Savor this moment. Notice what's working and carry it forward."
+            return "This is a good moment. Don't rush past it. Notice what's working and let it sink in."
         } else {
-            return "You are exactly where you need to be. Breathe, and take the next small step."
+            return "You're here. That's enough. Take a slow breath and see what the next moment brings."
         }
     }
 
@@ -163,14 +163,14 @@ actor WellnessEngine: WellnessEngineProtocol {
 
     func getContextualSuggestion(currentApp: String, activeMinutes: TimeInterval) async -> String {
         if activeMinutes > 7200 {
-            return "You've been working for \(Int(activeMinutes / 60)) minutes. Your mind deserves a break — try 2 minutes of box breathing."
+            return "You've been at it for \(Int(activeMinutes / 60)) minutes. Your brain needs a reset — try 2 minutes of box breathing."
         }
         if currentApp.lowercased().contains("figma") || currentApp.lowercased().contains("design") {
-            return "Creative work expands the mind. Step back to see the bigger picture."
+            return "Creative work stretches the mind. A short step back can help you see the bigger picture."
         }
         if currentApp.lowercased().contains("xcode") || currentApp.lowercased().contains("code") || currentApp.lowercased().contains("terminal") {
-            return "Deep focus mode detected. Remember to blink and stretch."
+            return "Deep in the flow. Don't forget: your body needs a stretch more than your code does."
         }
-        return "Stay present. You are exactly where you need to be."
+        return "Wherever you are, be all there."
     }
 }

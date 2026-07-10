@@ -168,7 +168,7 @@ actor ActivityTracker: ActivityTrackerProtocol {
         if id.contains("zoom") || id.contains("teams") || id.contains("meet") || id.contains("webex") || id.contains("slack") || name.contains("facetime") {
             return .meeting
         }
-        if name.contains("spotify") || name.contains("music") || id.contains("apple.music") {
+        if name.contains("spotify") || name.contains("music") || id.contains("apple") && name.contains("music") {
             return .media
         }
         if name.contains("notes") || name.contains("pages") || name.contains("word") || name.contains("obsidian") || name.contains("notion") || name.contains("bear") {

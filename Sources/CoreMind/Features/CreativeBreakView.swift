@@ -7,8 +7,9 @@ struct CreativeBreakView: View {
     @State private var isTimerRunning = false
     @State private var timerMinutes: Double = 5
     @State private var elapsed: TimeInterval = 0
-    @State private var timerTask: Task<Void, Never>?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let breakTimer = TimerManager(interval: 1.0)
 
     init() {
         _prompt = State(initialValue: CreativeBreakService.prompts.randomElement() ?? CreativeBreakService.prompts[0])
@@ -26,7 +27,7 @@ struct CreativeBreakView: View {
         .frame(width: 320)
         .padding()
         .background(Color.surfacePrimary)
-        .onDisappear { timerTask?.cancel() }
+        .onDisappear { breakTimer.cancel() }
     }
 
     // MARK: - Header
@@ -38,7 +39,7 @@ struct CreativeBreakView: View {
                 .accessibilityAddTraits(.isHeader)
             Spacer()
             Image(systemName: "paintpalette")
-                .foregroundColor(.brandPurple)
+                .foregroundColor(.cmPrimary)
         }
     }
 
@@ -53,7 +54,7 @@ struct CreativeBreakView: View {
                         .fontWeight(selectedCategory == nil ? .semibold : .regular)
                         .padding(.horizontal, Spacing.sm)
                         .padding(.vertical, Spacing.xxs)
-                        .background(selectedCategory == nil ? AnyShapeStyle(LinearGradient.brandSubtle) : AnyShapeStyle(Color.surfaceSecondary))
+                        .background(selectedCategory == nil ? AnyShapeStyle(Color.selectedBg) : AnyShapeStyle(Color.surfaceSecondary))
                         .cornerRadius(Radius.sm)
                 }
                 .buttonStyle(.plain)
@@ -71,7 +72,7 @@ struct CreativeBreakView: View {
                         .fontWeight(selectedCategory == category ? .semibold : .regular)
                         .padding(.horizontal, Spacing.sm)
                         .padding(.vertical, Spacing.xxs)
-                        .background(selectedCategory == category ? AnyShapeStyle(LinearGradient.brandSubtle) : AnyShapeStyle(Color.surfaceSecondary))
+                        .background(selectedCategory == category ? AnyShapeStyle(Color.selectedBg) : AnyShapeStyle(Color.surfaceSecondary))
                         .cornerRadius(Radius.sm)
                     }
                     .buttonStyle(.plain)
@@ -91,7 +92,7 @@ struct CreativeBreakView: View {
                     .font(.title2)
                 Text(prompt.category.rawValue)
                     .captionFont()
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
             }
 
             Text(prompt.title)
@@ -109,10 +110,10 @@ struct CreativeBreakView: View {
                 .foregroundColor(.textTertiary)
                 .multilineTextAlignment(.center)
                 .padding(Spacing.sm)
-                .background(LinearGradient.brandSubtle)
+                .background(Color.selectedBg)
                 .cornerRadius(Radius.sm)
 
-            GradientButton(title: "New Prompt", icon: "shuffle") {
+            PrimaryButton(title: "New Prompt", icon: "shuffle") {
                 newPrompt()
             }
             .transaction { t in
@@ -144,7 +145,7 @@ struct CreativeBreakView: View {
                 VStack(spacing: Spacing.sm) {
                     Text(formattedTime(from: timerMinutes * 60 - elapsed))
                         .timerFont()
-                        .foregroundColor(.brandPurple)
+                        .foregroundColor(.cmPrimary)
                         .accessibilityLabel("Break time remaining: \(formattedTime(from: timerMinutes * 60 - elapsed))")
 
                     Button("End Break") {
@@ -165,7 +166,7 @@ struct CreativeBreakView: View {
                     }
 
                     Slider(value: $timerMinutes, in: 1...30, step: 1)
-                        .tint(.brandPurple)
+                        .tint(.cmPrimary)
                         .accessibilityLabel("Break duration")
                         .accessibilityValue("\(Int(timerMinutes)) minutes")
 
@@ -174,7 +175,7 @@ struct CreativeBreakView: View {
                         .foregroundColor(.textTertiary)
                         .accessibilityLabel("\(Int(timerMinutes)) minute break selected")
 
-                    GradientButton(title: "Start Break", icon: "play.fill") {
+                    PrimaryButton(title: "Start Break", icon: "play.fill") {
                         startTimer()
                     }
                     .accessibilityHint("Starts a \(Int(timerMinutes)) minute creative break timer")
@@ -189,7 +190,7 @@ struct CreativeBreakView: View {
                 Text(icon).font(.title3)
                 Text("\(minutes)m")
                     .smallFont()
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
             }
         }
         .buttonStyle(.plain)
@@ -217,25 +218,18 @@ struct CreativeBreakView: View {
     private func startTimer() {
         isTimerRunning = true
         elapsed = 0
-        timerTask = Task {
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                let done = await MainActor.run {
-                    elapsed += 1
-                    if elapsed >= timerMinutes * 60 {
-                        endTimer()
-                        return true
-                    }
-                    return false
-                }
-                if done { break }
-            }
+
+        breakTimer.start { [self] elapsed in
+            self.elapsed = elapsed
+            return elapsed >= timerMinutes * 60 ? .stop : .continue
+        } onComplete: { [self] in
+            isTimerRunning = false
+            self.elapsed = 0
         }
     }
 
     private func endTimer() {
-        timerTask?.cancel()
-        timerTask = nil
+        breakTimer.cancel()
         isTimerRunning = false
         elapsed = 0
     }

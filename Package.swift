@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 5.10
 import PackageDescription
 
 let package = Package(
@@ -20,17 +20,11 @@ let package = Package(
                 .product(name: "GRDB", package: "grdb.swift"),
             ],
             path: "Sources/CoreMind",
-            resources: [.process("Resources")],
-            swiftSettings: [
-                .swiftLanguageVersion(.v6),
-            ]
+            resources: [.process("Resources")]
         ),
         .testTarget(
             name: "CoreMindTests",
-            dependencies: ["CoreMind"],
-            swiftSettings: [
-                .swiftLanguageVersion(.v6),
-            ]
+            dependencies: ["CoreMind"]
         ),
     ]
 )

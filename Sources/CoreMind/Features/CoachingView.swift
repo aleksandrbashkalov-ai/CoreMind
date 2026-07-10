@@ -18,7 +18,7 @@ struct CoachingView: View {
                         .headlineFont()
                     Spacer()
                     Image(systemName: "quote.opening")
-                        .foregroundColor(.brandPurple)
+                        .foregroundColor(.cmPrimary)
                 }
                 .accessibilityAddTraits(.isHeader)
 
@@ -114,7 +114,7 @@ struct CoachingView: View {
                         }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
-                        .tint(.brandPurple)
+                        .tint(.cmPrimary)
                         .disabled(reflection.trimmingCharacters(in: .whitespaces).isEmpty)
                         .accessibilityHint("Submits your reflection on this wisdom")
                     }
@@ -122,15 +122,8 @@ struct CoachingView: View {
             }
         }
         .padding(Spacing.lg)
-        .background(
-            LinearGradient.brandSubtle
-                .overlay(Color.surfaceSecondary.opacity(0.8))
-        )
+        .background(Color.surfaceSecondary)
         .cornerRadius(Radius.lg)
-        .overlay(
-            RoundedRectangle(cornerRadius: Radius.lg)
-                .stroke(LinearGradient.brand, lineWidth: 0.5)
-        )
         .cardShadow()
     }
 
@@ -140,7 +133,7 @@ struct CoachingView: View {
         CardView {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "pencil.line")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
                 Text("Reflection recorded")
                     .bodyFont()
                 Spacer()
@@ -158,7 +151,7 @@ struct CoachingView: View {
                 HStack {
                     Image(systemName: "chart.bar.fill")
                         .font(.caption)
-                        .foregroundColor(.brandPurple)
+                        .foregroundColor(.cmPrimary)
                     Text("Daily Insight")
                         .titleFont()
                         .fontWeight(.semibold)
@@ -245,7 +238,7 @@ struct CoachingView: View {
         switch priority {
         case .critical: return .statusRed
         case .high: return .statusOrange
-        case .medium: return Color.brandBlue
+        case .medium: return .cmTeal
         case .low: return .statusGreen
         }
     }

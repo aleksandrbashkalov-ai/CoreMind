@@ -67,12 +67,12 @@ struct PaywallView: View {
 
                 Image(systemName: "crown.fill")
                     .font(.system(size: 48))
-                    .foregroundStyle(LinearGradient.brandVertical)
+                    .foregroundColor(.cmPrimary)
                     .accessibilityHidden(true)
 
                 Text("You're Pro!")
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(LinearGradient.brandVertical)
+                    .foregroundColor(.cmPrimary)
                     .accessibilityAddTraits(.isHeader)
 
                 Text("Thank you for supporting CoreMind. All Pro features are unlocked.")
@@ -120,15 +120,15 @@ struct PaywallView: View {
         VStack(spacing: Spacing.md) {
             Image(systemName: "crown.fill")
                 .font(.system(size: 36))
-                .foregroundStyle(LinearGradient.brandVertical)
+                .foregroundColor(.cmPrimary)
                 .accessibilityHidden(true)
 
             Text("CoreMind Pro")
                 .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(LinearGradient.brandVertical)
+                .foregroundColor(.cmPrimary)
                 .accessibilityAddTraits(.isHeader)
 
-            Text("Unlock your full potential with AI-powered coaching, unlimited journaling, and deep insights.")
+            Text("Unlock your full potential with personalized coaching insights, unlimited journaling, and deep analytics.")
                 .captionFont()
                 .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
@@ -164,7 +164,7 @@ struct PaywallView: View {
                             .font(.caption)
                             .accessibilityHidden(true)
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.brandPurple)
+                            .foregroundColor(.cmPrimary)
                             .font(.caption)
                             .accessibilityHidden(true)
                     }
@@ -197,7 +197,7 @@ struct PaywallView: View {
                                 .fontWeight(.medium)
                             Text(displayPrice(for: product))
                                 .font(.system(size: 15, weight: .bold))
-                                .foregroundStyle(LinearGradient.brandVertical)
+                                .foregroundColor(.cmPrimary)
                             if let note = product.note {
                                 Text(note)
                                     .smallFont()
@@ -210,7 +210,7 @@ struct PaywallView: View {
                         .background(
                             Group {
                                 if selectedProduct == product {
-                                    LinearGradient.brandSubtle
+                                    Color.selectedBg
                                 } else {
                                     Color.surfaceSecondary
                                 }
@@ -219,7 +219,7 @@ struct PaywallView: View {
                         .cornerRadius(Radius.md)
                         .overlay(
                             RoundedRectangle(cornerRadius: Radius.md)
-                                .stroke(selectedProduct == product ? Color.brandPurple : Color.clear, lineWidth: 2)
+                                .stroke(selectedProduct == product ? Color.cmPrimary : Color.clear, lineWidth: 2)
                         )
                     }
                     .buttonStyle(.plain)
@@ -237,7 +237,7 @@ struct PaywallView: View {
     // MARK: - Purchase
 
     private var purchaseButton: some View {
-        GradientButton(title: "Continue with \(selectedProduct.label)", icon: "crown.fill") {
+        PrimaryButton(title: "Continue with \(selectedProduct.label)", icon: "crown.fill") {
             Task { await purchase() }
         }
         .disabled(isPurchasing)
@@ -256,7 +256,7 @@ struct PaywallView: View {
             }
             .buttonStyle(.plain)
             .captionFont()
-            .foregroundColor(.brandPurple)
+            .foregroundColor(.cmPrimary)
             .accessibilityHint("Restores previously purchased Pro subscription")
 
             if let msg = restoreMessage {
@@ -322,7 +322,7 @@ enum FeatureComparison: String, CaseIterable {
     case dailyWisdom = "Daily Stoic Wisdom"
     case focusSessions = "Focus Sessions"
     case breathing = "Breathing Exercises"
-    case aICoaching = "AI Coaching Insights"
+    case smartCoaching = "Smart Coaching"
     case weeklyReports = "Weekly Reports"
     case imagePlayground = "Image Playground"
     case calendarIntegration = "Calendar Integration"
@@ -331,7 +331,7 @@ enum FeatureComparison: String, CaseIterable {
         switch self {
         case .journaling, .checkIns, .dailyWisdom, .focusSessions, .breathing:
             return true
-        case .aICoaching, .weeklyReports, .imagePlayground, .calendarIntegration:
+        case .smartCoaching, .weeklyReports, .imagePlayground, .calendarIntegration:
             return false
         }
     }
@@ -339,7 +339,7 @@ enum FeatureComparison: String, CaseIterable {
     var note: String? {
         switch self {
         case .journaling: return "5 entries/mo"
-        case .aICoaching: return nil
+        case .smartCoaching: return nil
         case .imagePlayground: return "macOS 27+"
         default: return nil
         }

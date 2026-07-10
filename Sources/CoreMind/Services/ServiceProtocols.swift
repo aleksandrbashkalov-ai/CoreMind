@@ -23,8 +23,6 @@ protocol DatabaseServiceProtocol: AnyObject, Sendable {
     func vacuum() throws
 }
 
-// MARK: - AI
-
 // MARK: - Creative Break
 
 protocol CreativeBreakServiceProtocol: AnyObject, Sendable {

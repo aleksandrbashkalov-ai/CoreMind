@@ -48,7 +48,7 @@ extension View {
     func navigationShortcuts(
         currentView: Binding<CoreMindView>,
         onSettings: @escaping () -> Void = {
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            openSettingsWindow()
         }
     ) -> some View {
         self.background {
@@ -58,4 +58,13 @@ extension View {
             )
         }
     }
+}
+
+/// Opens the CoreMind settings window via the standard AppKit responder chain.
+/// SwiftUI's `Settings { ... }` scene registers this selector automatically.
+/// Using the standard AppKit selector name (not a custom one) makes this safe.
+func openSettingsWindow() {
+    // showSettingsWindow: is a standard AppKit/SwiftUI action for Settings scenes.
+    // It's registered by SwiftUI's Settings scene — not a custom selector.
+    NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
 }

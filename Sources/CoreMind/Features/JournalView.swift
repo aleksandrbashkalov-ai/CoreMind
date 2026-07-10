@@ -70,7 +70,7 @@ struct JournalView: View {
                 Button { selectedEntry = nil } label: {
                     Image(systemName: "chevron.left")
                         .font(.caption)
-                        .foregroundColor(.brandPurple)
+                        .foregroundColor(.cmPrimary)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Back to entries list")
@@ -79,7 +79,7 @@ struct JournalView: View {
                 Button { isNewEntry = true } label: {
                     Image(systemName: "plus")
                         .font(.caption)
-                        .foregroundColor(.brandPurple)
+                        .foregroundColor(.cmPrimary)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("New journal entry")
@@ -95,7 +95,7 @@ struct JournalView: View {
             Spacer()
             Image(systemName: "book.closed")
                 .font(.system(size: 40))
-                .foregroundColor(.brandPurple.opacity(0.5))
+                .foregroundColor(.cmPrimary.opacity(0.5))
             Text("No journal entries yet")
                 .headlineFont()
                 .foregroundColor(.textSecondary)
@@ -124,7 +124,7 @@ struct JournalView: View {
         Button(action: { selectedEntry = entry }) {
             HStack(spacing: Spacing.md) {
                 RoundedRectangle(cornerRadius: Radius.sm)
-                    .fill(LinearGradient.brandVertical)
+                    .fill(Color.cmPrimary)
                     .frame(width: 3)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -140,7 +140,7 @@ struct JournalView: View {
                         if !entry.tags.isEmpty {
                             Text(entry.tags.prefix(2).joined(separator: ", "))
                                 .smallFont()
-                                .foregroundColor(.brandPurple.opacity(0.6))
+                                .foregroundColor(.cmPrimary.opacity(0.6))
                                 .lineLimit(1)
                         }
                     }
@@ -207,7 +207,7 @@ struct JournalView: View {
             } catch {
                 entries[index].aiSummary = nil
                 selectedEntry = entries[index]
-                saveError = "Failed to save AI reflection: \(error.localizedDescription)"
+                saveError = "Failed to save reflection: \(error.localizedDescription)"
             }
         }
     }
@@ -257,11 +257,11 @@ struct JournalEntryEditor: View {
                                     .fontWeight(selectedPrompt == prompt ? .semibold : .regular)
                                     .padding(.horizontal, Spacing.sm)
                                     .padding(.vertical, Spacing.xxs)
-                                    .background(selectedPrompt == prompt ? AnyShapeStyle(LinearGradient.brandSubtle) : AnyShapeStyle(Color.surfaceSecondary))
+                                    .background(selectedPrompt == prompt ? AnyShapeStyle(Color.selectedBg) : AnyShapeStyle(Color.surfaceSecondary))
                                     .cornerRadius(Radius.sm)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: Radius.sm)
-                                            .stroke(selectedPrompt == prompt ? Color.brandPurple : Color.clear, lineWidth: 1)
+                                            .stroke(selectedPrompt == prompt ? Color.cmPrimary : Color.clear, lineWidth: 1)
                                     )
                             }
                             .buttonStyle(.plain)
@@ -276,7 +276,7 @@ struct JournalEntryEditor: View {
                     HStack(spacing: Spacing.xs) {
                         Image(systemName: "quote.opening")
                             .smallFont()
-                            .foregroundColor(.brandPurple)
+                            .foregroundColor(.cmPrimary)
                         Text(promptText)
                             .captionFont()
                             .italic()
@@ -306,7 +306,7 @@ struct JournalEntryEditor: View {
                         Button("Add") { addTag() }
                             .buttonStyle(.plain)
                             .captionFont()
-                            .foregroundColor(.brandPurple)
+                            .foregroundColor(.cmPrimary)
                             .accessibilityLabel("Add tag button")
                     }
                 }
@@ -320,7 +320,7 @@ struct JournalEntryEditor: View {
                             HStack(spacing: 2) {
                                 Text("#\(tag)")
                                     .smallFont()
-                                    .foregroundColor(.brandPurple)
+                                    .foregroundColor(.cmPrimary)
                                 Button { tags.removeAll { $0 == tag } } label: {
                                     Image(systemName: "xmark")
                                         .font(.system(size: 6))
@@ -333,7 +333,7 @@ struct JournalEntryEditor: View {
                             .accessibilityLabel("Tag: \(tag)")
                             .padding(.horizontal, Spacing.xs)
                             .padding(.vertical, 2)
-                            .background(LinearGradient.brandSubtle)
+                            .background(Color.selectedBg)
                             .cornerRadius(Radius.sm)
                         }
                     }
@@ -348,7 +348,7 @@ struct JournalEntryEditor: View {
                         .foregroundColor(.textSecondary)
                         .accessibilityHint("Discards the current entry and goes back")
                     Spacer()
-                    GradientButton(title: "Save Entry", icon: "bookmark.fill") {
+                    PrimaryButton(title: "Save Entry", icon: "bookmark.fill") {
                         let entry = JournalEntry(
                             prompt: selectedPrompt.rawValue,
                             content: content,
@@ -424,7 +424,7 @@ struct JournalEntryDetail: View {
                     Text(entry.prompt.isEmpty ? "Free write" : entry.prompt)
                         .captionFont()
                         .italic()
-                        .foregroundColor(.brandPurple)
+                        .foregroundColor(.cmPrimary)
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Writing prompt: \(entry.prompt.isEmpty ? "Free write" : entry.prompt)")
@@ -440,10 +440,10 @@ struct JournalEntryDetail: View {
                         ForEach(entry.tags, id: \.self) { tag in
                             Text("#\(tag)")
                                 .smallFont()
-                                .foregroundColor(.brandPurple)
+                                .foregroundColor(.cmPrimary)
                                 .padding(.horizontal, Spacing.xs)
                                 .padding(.vertical, 2)
-                                .background(LinearGradient.brandSubtle)
+                                .background(Color.selectedBg)
                                 .cornerRadius(Radius.sm)
                                 .accessibilityLabel("Tag: \(tag)")
                         }
@@ -455,10 +455,10 @@ struct JournalEntryDetail: View {
                     BrandDivider()
                     VStack(alignment: .leading, spacing: Spacing.xs) {
                         HStack {
-                            Image(systemName: "sparkles")
+                            Image(systemName: "brain.head.profile")
                                 .smallFont()
-                                .foregroundColor(.brandPurple)
-                            Text("AI Reflection")
+                                .foregroundColor(.cmPrimary)
+                            Text("Reflection")
                                 .smallFont()
                                 .foregroundColor(.textSecondary)
                         }
@@ -467,11 +467,11 @@ struct JournalEntryDetail: View {
                             .foregroundColor(.textTertiary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(Spacing.sm)
-                            .background(LinearGradient.brandSubtle)
+                            .background(Color.selectedBg)
                             .cornerRadius(Radius.sm)
                     }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("AI reflection: \(summary)")
+                    .accessibilityLabel("Reflection: \(summary)")
                 }
 
                 BrandDivider()
@@ -486,7 +486,7 @@ struct JournalEntryDetail: View {
                         }
                     }
                     .buttonStyle(.plain)
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
                     .accessibilityLabel("Back to entries list")
                     .accessibilityHint("Returns to the journal overview")
 
@@ -496,16 +496,16 @@ struct JournalEntryDetail: View {
                         if isGeneratingAI {
                             ProgressView().scaleEffect(0.6)
                         } else {
-                    Label("AI Reflect", systemImage: "sparkles")
+                    Label("Reflect", systemImage: "wand.and.rays")
                         .captionFont()
                         .fontWeight(.medium)
                         }
                     }
                     .buttonStyle(.bordered)
-                    .tint(.brandPurple)
+                    .tint(.cmPrimary)
                     .disabled(isGeneratingAI || entry.aiSummary != nil)
-                    .accessibilityLabel("Generate AI reflection")
-                    .accessibilityHint("Creates an AI-powered analysis of this journal entry")
+                    .accessibilityLabel("Generate reflection")
+                    .accessibilityHint("Creates a thoughtful analysis of this journal entry")
                     .accessibilityValue(entry.aiSummary != nil ? "Already generated" : (isGeneratingAI ? "Generating" : "Available"))
 
                     Button("Delete", action: onDelete)

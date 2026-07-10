@@ -42,7 +42,7 @@ struct InsightsView: View {
                     .headlineFont()
                 Spacer()
                 Image(systemName: "chart.pie.fill")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
             }
             .accessibilityAddTraits(.isHeader)
 
@@ -125,7 +125,7 @@ struct InsightsView: View {
                         .padding(.vertical, Spacing.md)
                 } else {
                     let points = buildMoodChartPoints()
-                    let styleScale: KeyValuePairs<String, Color> = ["Mood": .brandPurple, "Energy": .brandBlue]
+                    let styleScale: KeyValuePairs<String, Color> = ["Mood": .cmPrimary, "Energy": .cmTeal]
                     Chart(points) { point in
                         LineMark(
                             x: .value("Date", point.date),
@@ -162,8 +162,8 @@ struct InsightsView: View {
                     .chartForegroundStyleScale(styleScale)
                     .chartLegend(position: .bottom, spacing: 4) {
                         HStack(spacing: Spacing.lg) {
-                            legendDot(color: .brandPurple, label: "Mood")
-                            legendDot(color: .brandBlue, label: "Energy")
+                            legendDot(color: .cmPrimary, label: "Mood")
+                            legendDot(color: .cmTeal, label: "Energy")
                         }
                         .smallFont()
                     }
@@ -306,22 +306,16 @@ struct InsightsView: View {
 
     private func patternCard(_ pattern: String) -> some View {
         HStack(spacing: Spacing.sm) {
-            Image(systemName: "sparkles.rectangle.stack")
-                .foregroundColor(.brandPurple)
+            Image(systemName: "chart.bar.doc.horizontal")
+                .foregroundColor(.cmPrimary)
             Text(pattern)
                 .bodyFont()
             Spacer()
         }
         .padding(Spacing.lg)
-        .background(
-            LinearGradient.brandSubtle
-                .overlay(Color.surfaceSecondary.opacity(0.7))
-        )
+        .background(Color.surfaceSecondary)
         .cornerRadius(Radius.lg)
-        .overlay(
-            RoundedRectangle(cornerRadius: Radius.lg)
-                .stroke(LinearGradient.brand, lineWidth: 0.5)
-        )
+        .cardShadow()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Pattern insight: \(pattern)")
     }

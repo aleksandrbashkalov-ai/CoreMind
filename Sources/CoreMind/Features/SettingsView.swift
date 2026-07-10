@@ -42,7 +42,7 @@ struct SettingsView: View {
                             .foregroundColor(.textSecondary)
                     }
                 }
-                .tint(.brandPurple)
+                .tint(.cmPrimary)
                 .accessibilityLabel("Track Activity")
                 .accessibilityHint("Monitors active app usage for insights")
             }
@@ -56,7 +56,7 @@ struct SettingsView: View {
                         in: 30...480,
                         step: 15
                     )
-                    .tint(.brandPurple)
+                    .tint(.cmPrimary)
                     .accessibilityLabel("Daily Focus Goal")
                     .accessibilityValue("\(Int(settings.dailyGoalMinutes)) minutes")
                     Text("\(Int(settings.dailyGoalMinutes)) minutes")
@@ -72,7 +72,7 @@ struct SettingsView: View {
                         in: 1800...14400,
                         step: 600
                     )
-                    .tint(.brandPurple)
+                    .tint(.cmPrimary)
                     .accessibilityLabel("Break Interval")
                     .accessibilityValue("Every \(Int(settings.breakInterval / 60)) minutes")
                     Text("Every \(Int(settings.breakInterval / 60)) minutes")
@@ -90,7 +90,7 @@ struct SettingsView: View {
                         in: 1800...14400,
                         step: 600
                     )
-                    .tint(.brandPurple)
+                    .tint(.cmPrimary)
                     .accessibilityLabel("Mood Reminder Interval")
                     .accessibilityValue("Every \(Int(settings.moodReminderInterval / 60)) minutes")
                     Text("Every \(Int(settings.moodReminderInterval / 60)) minutes")
@@ -100,16 +100,16 @@ struct SettingsView: View {
 
                 Toggle(isOn: Bindable(settings).useAI) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("AI Coaching")
+                        Text("Smart Coaching")
                             .titleFont()
-                        Text("On-device mood analysis and coaching")
+                        Text("On-device mood analysis and personalized tips")
                             .smallFont()
                             .foregroundColor(.textSecondary)
                     }
                 }
-                .tint(.brandPurple)
-                .accessibilityLabel("AI Coaching")
-                .accessibilityHint("On-device mood analysis and coaching")
+                .tint(.cmPrimary)
+                .accessibilityLabel("Smart Coaching")
+                .accessibilityHint("On-device mood analysis and personalized tips")
             }
         }
         .formStyle(.grouped)
@@ -124,7 +124,7 @@ struct SettingsView: View {
                 VStack(spacing: Spacing.sm) {
                     Image(systemName: "hand.raised.fill")
                         .font(.system(size: 40))
-                        .foregroundStyle(LinearGradient.brandVertical)
+                        .foregroundColor(.cmPrimary)
                         .accessibilityHidden(true)
 
                     Text("Privacy First")
@@ -151,7 +151,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    FeatureRow(icon: "antenna.radiowaves.left.and.right.slash", iconColor: .brandPurple) {
+                    FeatureRow(icon: "antenna.radiowaves.left.and.right.slash", iconColor: .cmPrimary) {
                         VStack(alignment: .leading, spacing: 1) {
                             Text("No Cloud by Default")
                                 .titleFont()
@@ -162,7 +162,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    FeatureRow(icon: "calendar.badge.clock", iconColor: .brandBlue) {
+                    FeatureRow(icon: "calendar.badge.clock", iconColor: .cmTeal) {
                         VStack(alignment: .leading, spacing: 1) {
                             Text("30-Day Retention")
                                 .titleFont()
@@ -182,7 +182,7 @@ struct SettingsView: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .tint(.brandPurple)
+                .tint(.cmPrimary)
                 .accessibilityHint("Opens system accessibility permissions")
 
                 Button(role: .destructive) {
@@ -227,7 +227,7 @@ struct SettingsView: View {
 
             Image(systemName: "brain.head.profile")
                 .font(.system(size: 48))
-                .foregroundStyle(LinearGradient.brandVertical)
+                .foregroundColor(.cmPrimary)
                 .accessibilityHidden(true)
 
             Text("CoreMind")

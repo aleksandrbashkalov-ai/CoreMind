@@ -1,91 +1,96 @@
 import SwiftUI
 
-// MARK: - Typography Constants
+// MARK: - Typography
 
-/// Centralized text style sizes for HIG-compliant Dynamic Type support.
-/// All feature views use these instead of hardcoded sizes.
+/// Centralized text style sizes for Dynamic Type support.
 enum Typography {
-    /// `.headline` — semibold, ~13–15pt (adapts to user text size)
     static let headline: Font = .headline
-    /// `.subheadline.weight(.medium)` — ~11–12pt
     static let title: Font = .subheadline.weight(.medium)
-    /// `.body` — ~12–13pt
     static let body: Font = .body
-    /// `.caption` — ~11–12pt
     static let caption: Font = .caption
-    /// `.caption2` — ~11pt, lighter weight
     static let small: Font = .caption2
-    /// Large monospaced for timer display (timerFont stays large intentionally)
     static let timer: Font = .system(size: 44, weight: .medium, design: .monospaced)
 }
 
-// MARK: - Brand Colors (Dark Mode Adaptive)
+// MARK: - Brand Colors — flat, distinctive, non-AI
 
-private enum AdaptiveColor {
-    static func ns(_ light: (r: CGFloat, g: CGFloat, b: CGFloat), dark: (r: CGFloat, g: CGFloat, b: CGFloat)) -> NSColor {
-        NSColor(name: nil) { appearance in
-            let isDark = appearance.bestMatch(from: [.darkAqua, .vibrantDark, .accessibilityHighContrastDarkAqua, .accessibilityHighContrastVibrantDark]) != nil
-            let c = isDark ? dark : light
-            return NSColor(red: c.r / 255, green: c.g / 255, blue: c.b / 255, alpha: 1)
-        }
-    }
-}
-
+/// CoreMind palette: warm, earthy, human — not generic purple/blue gradients.
+/// Each color has a light and dark variant for proper Dark Mode support.
 extension Color {
-    /// Brand purple — automatically adapts for Dark Mode (lighter in dark)
-    static let brandPurple = Color(nsColor: AdaptiveColor.ns(
-        (r: 108, g: 92, b: 231),
-        dark: (r: 170, g: 155, b: 255)
-    ))
-    /// Brand blue — automatically adapts for Dark Mode (lighter in dark)
-    static let brandBlue = Color(nsColor: AdaptiveColor.ns(
-        (r: 74, g: 144, b: 217),
-        dark: (r: 120, g: 190, b: 250)
-    ))
-    static let brandGradientStart = brandPurple
-    static let brandGradientEnd = brandBlue
+    // MARK: - Primary palette
 
-    // MARK: - Surfaces (adaptive via NSColor)
+    /// Warm indigo — our primary identity color. Replaces brandPurple.
+    static let cmPrimary = Color(nsColor: AdaptiveColor.ns(
+        light: (r: 92, g: 92, b: 231),
+        dark: (r: 160, g: 160, b: 255)
+    ))
 
-    /// Window background — adapts to Dark Mode natively
+    /// Warm teal — secondary, used for positive actions and highlights.
+    static let cmTeal = Color(nsColor: AdaptiveColor.ns(
+        light: (r: 0, g: 184, b: 148),
+        dark: (r: 80, g: 220, b: 180)
+    ))
+
+    /// Earthy coral — energy, alerts, passion. Replaces statusRed as the warm accent.
+    static let cmCoral = Color(nsColor: AdaptiveColor.ns(
+        light: (r: 230, g: 92, b: 92),
+        dark: (r: 255, g: 140, b: 120)
+    ))
+
+    /// Soft amber — warmth, creativity. Replaces statusOrange.
+    static let cmAmber = Color(nsColor: AdaptiveColor.ns(
+        light: (r: 220, g: 160, b: 40),
+        dark: (r: 255, g: 200, b: 80)
+    ))
+
+    /// Deep slate — grounding, contrast.
+    static let cmSlate = Color(nsColor: AdaptiveColor.ns(
+        light: (r: 55, g: 65, b: 81),
+        dark: (r: 200, g: 210, b: 225)
+    ))
+
+    // MARK: - Semantic aliases
+
+    static let brandAccent = cmPrimary
+
+    // MARK: - Surfaces (use system adaptive colors)
+
     static let surfacePrimary = Color(nsColor: .windowBackgroundColor)
-    /// Control background — adapts to Dark Mode natively
     static let surfaceSecondary = Color(nsColor: .controlBackgroundColor)
-    /// Under-page background — adapts to Dark Mode natively
     static let surfaceTertiary = Color(nsColor: .underPageBackgroundColor)
 
-    // MARK: - Text Colors (adaptive via platform colors)
+    // MARK: - Text
 
     static let textPrimary = Color.primary
     static let textSecondary = Color.secondary
-    /// Uses `tertiaryLabelColor` for proper Dark Mode + accessibility contrast
     static let textTertiary = Color(nsColor: .tertiaryLabelColor)
 
-    // MARK: - Status Colors (keep vivid in both modes)
+    // MARK: - Status (keep vivid, but adjusted for harmony)
 
-    static let statusGreen = Color(red: 46 / 255, green: 204 / 255, blue: 113 / 255)
-    static let statusOrange = Color(red: 243 / 255, green: 156 / 255, blue: 18 / 255)
-    static let statusRed = Color(red: 231 / 255, green: 76 / 255, blue: 60 / 255)
-    static let statusTeal = Color(red: 26 / 255, green: 188 / 255, blue: 156 / 255)
+    static let statusGreen = Color(red: 38 / 255, green: 190 / 255, blue: 120 / 255)
+    static let statusOrange = Color(red: 230 / 255, green: 155 / 255, blue: 35 / 255)
+    static let statusRed = Color(red: 220 / 255, green: 70 / 255, blue: 60 / 255)
+    static let statusTeal = Color(red: 30 / 255, green: 180 / 255, blue: 155 / 255)
+
+    // MARK: - Selection state backgrounds
+
+    static let selectedBg = Color.cmPrimary.opacity(0.12)
+    static let borderPrimary = Color.cmPrimary.opacity(0.5)
 }
 
-// MARK: - Gradients
+// MARK: - Gradients (minimal — used only in TimerRing + 1 hero spot)
 
 extension LinearGradient {
-    static let brand = LinearGradient(
-        colors: [.brandPurple, .brandBlue],
+    /// Used ONLY for the timer ring accent.
+    static let timerAccent = LinearGradient(
+        colors: [.cmPrimary, .cmTeal],
         startPoint: .leading,
         endPoint: .trailing
     )
 
-    static let brandVertical = LinearGradient(
-        colors: [.brandPurple, .brandBlue],
-        startPoint: .top,
-        endPoint: .bottom
-    )
-
-    static let brandSubtle = LinearGradient(
-        colors: [.brandPurple.opacity(0.1), .brandBlue.opacity(0.1)],
+    /// Subtle shimmer for the hero welcome section.
+    static let heroGlow = LinearGradient(
+        colors: [.cmPrimary.opacity(0.08), .cmTeal.opacity(0.08)],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
@@ -122,10 +127,27 @@ extension View {
     }
 }
 
+// MARK: - Adaptive Color Helper
+
+private enum AdaptiveColor {
+    static func ns(
+        light: (r: CGFloat, g: CGFloat, b: CGFloat),
+        dark: (r: CGFloat, g: CGFloat, b: CGFloat)
+    ) -> NSColor {
+        NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [
+                .darkAqua, .vibrantDark,
+                .accessibilityHighContrastDarkAqua,
+                .accessibilityHighContrastVibrantDark
+            ]) != nil
+            let c = isDark ? dark : light
+            return NSColor(red: c.r / 255, green: c.g / 255, blue: c.b / 255, alpha: 1)
+        }
+    }
+}
+
 // MARK: - Hover Effects (macOS HIG)
 
-/// Adds a macOS-appropriate hover highlight and pointing-hand cursor.
-/// Use on any tappable plain-style button or card that needs hover feedback.
 extension View {
     func hoverEffect() -> some View {
         modifier(HoverHighlightModifier())
@@ -144,16 +166,15 @@ private struct HoverHighlightModifier: ViewModifier {
             }
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.sm)
-                    .fill(Color.primary.opacity(isHovering ? 0.06 : 0))
+                    .fill(Color.primary.opacity(isHovering ? 0.04 : 0))
             )
             .clipShape(RoundedRectangle(cornerRadius: Radius.sm))
             .pointingHandCursor()
     }
 }
 
-// MARK: - Cursor Helpers (macOS)
+// MARK: - Cursor Helper
 
-/// Adds a pointing-hand cursor on hover. Uses addCursorRect for safe cursor management.
 extension View {
     func pointingHandCursor() -> some View {
         modifier(PointingHandCursorModifier())
@@ -176,44 +197,19 @@ private struct PointingHandCursorModifier: ViewModifier {
     }
 }
 
-// MARK: - Font Modifiers (Dynamic Type)
+// MARK: - Font Modifiers
 
 extension View {
-    /// Uses `.headline` — responds to system text size settings.
-    func headlineFont() -> some View {
-        font(.headline)
-    }
-
-    /// Uses `.subheadline.weight(.medium)` — responds to system text size settings.
-    func titleFont() -> some View {
-        font(.subheadline.weight(.medium))
-    }
-
-    /// Uses `.body` — responds to system text size settings.
-    func bodyFont() -> some View {
-        font(.body)
-    }
-
-    /// Uses `.caption` — responds to system text size settings.
-    func captionFont() -> some View {
-        font(.caption)
-    }
-
-    /// Uses `.caption2` — responds to system text size settings.
-    func smallFont() -> some View {
-        font(.caption2)
-    }
-
-    /// Large monospaced timer — intentionally fixed size for readability.
-    func timerFont() -> some View {
-        font(Typography.timer)
-    }
+    func headlineFont() -> some View { font(.headline) }
+    func titleFont() -> some View { font(.subheadline.weight(.medium)) }
+    func bodyFont() -> some View { font(.body) }
+    func captionFont() -> some View { font(.caption) }
+    func smallFont() -> some View { font(.caption2) }
+    func timerFont() -> some View { font(Typography.timer) }
 }
 
-// MARK: - Reduce Motion
+// MARK: - Reduce Motion Helper
 
-/// Applies an animation only when the user has not requested Reduce Motion.
-/// Use this everywhere instead of `.animation(_, value:)` directly.
 extension View {
     func conditionalAnimation<V: Equatable>(_ animation: Animation?, value: V) -> some View {
         modifier(ReduceMotionModifier(animation: animation, value: value))
@@ -239,7 +235,7 @@ private struct ReduceMotionModifier<V: Equatable>: ViewModifier {
 struct BrandDivider: View {
     var body: some View {
         Rectangle()
-            .fill(Color.gray.opacity(0.12))
+            .fill(Color.gray.opacity(0.1))
             .frame(height: 1)
     }
 }

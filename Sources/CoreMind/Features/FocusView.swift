@@ -6,10 +6,11 @@ struct FocusView: View {
     @State private var focusElapsed: TimeInterval = 0
     @State private var breakElapsed: TimeInterval = 0
     @State private var sessionType: FocusSessionType = .pomodoro
-    @State private var timer: Task<Void, Never>?
     @State private var currentSession: FocusSession?
     @State private var interruptions = 0
     @State private var saveError: String?
+
+    private let timer = TimerManager(interval: 1.0)
 
     var body: some View {
         VStack(spacing: Spacing.xxl) {
@@ -23,7 +24,7 @@ struct FocusView: View {
         .padding()
         .background(Color.surfacePrimary)
         .onDisappear {
-            timer?.cancel()
+            timer.cancel()
         }
         .alert("Save Error", isPresented: .init(
             get: { saveError != nil },
@@ -45,7 +46,7 @@ struct FocusView: View {
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
                 Image(systemName: "target")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
                     .accessibilityHidden(true)
             }
 
@@ -60,7 +61,7 @@ struct FocusView: View {
                             .background(
                                 Group {
                                     if sessionType == type {
-                                        LinearGradient.brandSubtle
+                                        Color.selectedBg
                                     } else {
                                         Color.surfaceSecondary
                                     }
@@ -69,7 +70,7 @@ struct FocusView: View {
                             .cornerRadius(Radius.sm)
                             .overlay(
                                 RoundedRectangle(cornerRadius: Radius.sm)
-                                    .stroke(sessionType == type ? Color.brandPurple : Color.clear, lineWidth: 1)
+                                    .stroke(sessionType == type ? Color.cmPrimary : Color.clear, lineWidth: 1)
                             )
                     }
                     .buttonStyle(.plain)
@@ -90,7 +91,7 @@ struct FocusView: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.brandPurple)
+            .tint(.cmPrimary)
             .controlSize(.large)
             .accessibilityHint("Begins a new focus session")
         }
@@ -109,7 +110,7 @@ struct FocusView: View {
 
             TimerRingView(
                 progress: progress,
-                phaseColor: state == .break_ ? .statusTeal : .brandPurple,
+                phaseColor: state == .break_ ? .statusTeal : .cmPrimary,
                 lineWidth: 6,
                 size: 200
             ) {
@@ -133,10 +134,15 @@ struct FocusView: View {
                 .accessibilityHint("Pause the current session without completing it")
 
                 Button(state == .break_ ? "Skip Break" : "Complete") {
-                    completeSession()
+                    if state == .break_ {
+                        finishSession(completed: true)
+                    } else {
+                        timer.cancel()
+                        completeFocusPhase()
+                    }
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(state == .break_ ? .statusTeal : .brandPurple)
+                .tint(state == .break_ ? .statusTeal : .cmPrimary)
                 .accessibilityHint(state == .break_ ? "End the break early and finish the session" : "Complete the current focus session")
             }
         }
@@ -231,72 +237,54 @@ struct FocusView: View {
             saveError = "Failed to save session: \(error.localizedDescription)"
         }
 
-        timer = Task {
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                let isDone = await MainActor.run {
-                    focusElapsed += 1
-                    if focusElapsed >= currentDuration {
-                        completeSession()
-                        return true
-                    }
-                    return false
-                }
-                if isDone { break }
-            }
+        startFocusTimer()
+    }
+
+    private func startFocusTimer() {
+        timer.start { [self] elapsed in
+            focusElapsed = elapsed
+            return elapsed >= currentDuration ? .stop : .continue
+        } onComplete: { [self] in
+            completeFocusPhase()
         }
     }
 
-    private func completeSession() {
-        timer?.cancel()
-        timer = nil
-
-        if state == .focusing {
-            // Save focus phase completion before starting break
-            if var session = currentSession {
-                session.endTime = Date()
-                session.state = .completed
-                session.focusScore = 1.0
-                do {
-                    try deps.database.saveFocusSession(session)
-                } catch {
-                    saveError = "Failed to save focus phase: \(error.localizedDescription)"
-                }
-                currentSession = session
+    private func completeFocusPhase() {
+        // Save focus phase completion before starting break
+        if var session = currentSession {
+            session.endTime = Date()
+            session.state = .completed
+            session.focusScore = 1.0
+            do {
+                try deps.database.saveFocusSession(session)
+            } catch {
+                saveError = "Failed to save focus phase: \(error.localizedDescription)"
             }
+            currentSession = session
+        }
 
-            state = .break_
-            breakElapsed = 0
+        state = .break_
+        breakElapsed = 0
+        startBreakTimer()
+    }
 
-            timer = Task {
-                while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                    let isDone = await MainActor.run {
-                        breakElapsed += 1
-                        if breakElapsed >= currentBreakDuration {
-                            finishSession(completed: true)
-                            return true
-                        }
-                        return false
-                    }
-                    if isDone { break }
-                }
-            }
-        } else {
+    private func startBreakTimer() {
+        timer.start { [self] elapsed in
+            breakElapsed = elapsed
+            return elapsed >= currentBreakDuration ? .stop : .continue
+        } onComplete: { [self] in
             finishSession(completed: true)
         }
     }
 
     private func interruptSession() {
-        timer?.cancel()
-        timer = nil
+        timer.cancel()
         interruptions += 1
         finishSession(completed: false)
     }
 
     private func finishSession(completed: Bool) {
         state = completed ? .completed : .interrupted
-        timer = nil
 
         Task { [weak deps, session = currentSession] in
             guard let deps else { return }

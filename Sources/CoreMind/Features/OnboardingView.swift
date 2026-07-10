@@ -41,7 +41,7 @@ struct OnboardingView: View {
                         .accessibilityHint("Go to the previous step")
                     }
                     Spacer()
-                    GradientButton(
+                    PrimaryButton(
                         title: step == 0 ? "Get Started" : "Continue",
                         icon: step == 0 ? nil : "arrow.right"
                     ) {
@@ -52,7 +52,7 @@ struct OnboardingView: View {
                 .padding(.horizontal, Spacing.xxl)
                 .padding(.bottom, Spacing.xxl)
             } else {
-                GradientButton(title: "Start Using CoreMind", icon: "sparkles") {
+                PrimaryButton(title: "Start Using CoreMind", icon: "checkmark.circle") {
                     completeOnboarding()
                 }
                 .controlSize(.large)
@@ -65,7 +65,7 @@ struct OnboardingView: View {
                 HStack(spacing: Spacing.xs) {
                     ForEach(0..<totalSteps, id: \.self) { i in
                         Circle()
-                            .fill(i <= step ? AnyShapeStyle(LinearGradient.brand) : AnyShapeStyle(Color.gray.opacity(0.25)))
+                            .fill(i <= step ? Color.cmPrimary : Color.gray.opacity(0.25))
                             .frame(width: 7, height: 7)
                     }
                 }
@@ -83,12 +83,12 @@ struct OnboardingView: View {
         VStack(spacing: Spacing.xl) {
             Image(systemName: "brain.head.profile")
                 .font(.system(size: 56))
-                .foregroundStyle(LinearGradient.brandVertical)
+                .foregroundColor(.cmPrimary)
                 .accessibilityHidden(true)
 
             Text("Welcome to CoreMind")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(LinearGradient.brandVertical)
+                .foregroundColor(.cmPrimary)
                 .accessibilityAddTraits(.isHeader)
 
             Text("Your mindful productivity companion.\nTrack focus, build habits, and stay balanced — right from your menu bar.")
@@ -105,7 +105,7 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: Spacing.xl) {
             HStack {
                 Image(systemName: "hand.raised.fill")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
                     .accessibilityHidden(true)
                 Text("Permissions")
                     .headlineFont()
@@ -163,7 +163,7 @@ struct OnboardingView: View {
             Spacer()
 
             if !granted {
-                GradientButton(title: "Allow", icon: nil, action: action)
+                PrimaryButton(title: "Allow", icon: nil, action: action)
                     .accessibilityLabel("Allow \(title)")
                     .accessibilityHint(description)
             }
@@ -182,7 +182,7 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
             HStack {
                 Image(systemName: "target")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
                     .accessibilityHidden(true)
                 Text("Your Goals")
                     .headlineFont()
@@ -209,14 +209,14 @@ struct OnboardingView: View {
                         Spacer()
                         if selectedGoals.contains(goal.rawValue) {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.brandPurple)
+                                .foregroundColor(.cmPrimary)
                         }
                     }
                     .padding(Spacing.md)
                     .background(
                         Group {
                             if selectedGoals.contains(goal.rawValue) {
-                                LinearGradient.brandSubtle
+                                Color.selectedBg
                             } else {
                                 Color.surfaceSecondary
                             }
@@ -225,7 +225,7 @@ struct OnboardingView: View {
                     .cornerRadius(Radius.md)
                     .overlay(
                         RoundedRectangle(cornerRadius: Radius.md)
-                            .stroke(selectedGoals.contains(goal.rawValue) ? Color.brandPurple : Color.clear, lineWidth: 1)
+                            .stroke(selectedGoals.contains(goal.rawValue) ? Color.cmPrimary : Color.clear, lineWidth: 1)
                     )
                 }
                 .buttonStyle(.plain)
@@ -242,7 +242,7 @@ struct OnboardingView: View {
         VStack(spacing: Spacing.xl) {
             Image(systemName: "quote.opening")
                 .font(.system(size: 36))
-                .foregroundStyle(LinearGradient.brandVertical)
+                .foregroundColor(.cmPrimary)
                 .accessibilityHidden(true)
 
             Text("Your North Star")

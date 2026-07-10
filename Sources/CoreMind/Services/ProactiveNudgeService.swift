@@ -100,38 +100,38 @@ actor ProactiveNudgeService: ProactiveNudgeServiceProtocol {
 
         if continuousMinutes > 120 && canNudge(.breakReminder) {
             await fireNudge(.breakReminder, title: "Time for a break",
-                message: "You've been working for \(continuousMinutes) minutes. Your brain needs rest to stay sharp.",
+                message: "\(continuousMinutes) minutes straight. Even the sharpest blade needs honing.",
                 actionTitle: "Breathe for 2 min")
         }
 
         if continuousMinutes > 240 && canNudge(.burnout) {
             await fireNudge(.burnout, title: "Extended work detected",
-                message: "Over 4 hours of continuous work. Take a real break — step away from the screen.",
+                message: "Over 4 hours without a real pause. Step away from the screen — your future self will thank you.",
                 actionTitle: "Start break")
         }
 
         if distractionCount >= 5 && canNudge(.distraction) {
             await fireNudge(.distraction, title: "Frequent switching",
-                message: "You've switched tasks \(distractionCount) times recently. Try a focus session.",
+                message: "You've switched tasks \(distractionCount) times. Your attention is fragmenting — a focus session can help.",
                 actionTitle: "Start Focus")
         }
 
         if appCategory == .creative && continuousMinutes > 90 && canNudge(.creativeBreak) {
             await fireNudge(.creativeBreak, title: "Creative flow detected",
-                message: "You're deep in creative work. A short break can reset your perspective.",
+                message: "You're deep in creative work. A short pause can reset your perspective.",
                 actionTitle: "Creative pause")
         }
 
         if appCategory == .meeting && continuousMinutes > 60 && canNudge(.movement) {
             await fireNudge(.movement, title: "Meeting marathon",
-                message: "Back-to-back meetings reduce cognitive performance. Stand up and stretch.",
+                message: "Back-to-back meetings drain cognitive sharpness. Stand up, stretch, reset.",
                 actionTitle: "Stretch")
         }
 
         if totalActive < 3600 && Calendar.current.component(.hour, from: Date()) >= 10
             && canNudge(.focusSession) {
             await fireNudge(.focusSession, title: "Shallow work morning",
-                message: "Less than 1 hour of focused work today. Start a deep work session.",
+                message: "Less than an hour of focused work so far. A deep work session now would change your trajectory.",
                 actionTitle: "Start now")
         }
     }

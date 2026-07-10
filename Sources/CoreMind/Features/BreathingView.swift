@@ -6,8 +6,9 @@ struct BreathingView: View {
     @State private var phase: BreathingPhase = .idle
     @State private var cycleCount = 0
     @State private var phaseTime: TimeInterval = 0
-    @State private var timer: Task<Void, Never>?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let timer = TimerManager(interval: 0.1)
 
     private enum BreathingPhase {
         case idle, inhale, hold, exhale, holdAfterExhale
@@ -25,8 +26,8 @@ struct BreathingView: View {
         var color: Color {
             switch self {
             case .idle: return .gray
-            case .inhale: return Color.brandBlue
-            case .hold: return .brandPurple
+            case .inhale: return Color.cmPrimary
+            case .hold: return .cmPrimary
             case .exhale: return .statusGreen
             case .holdAfterExhale: return .statusTeal
             }
@@ -45,7 +46,7 @@ struct BreathingView: View {
         .padding()
         .background(Color.surfacePrimary)
         .onDisappear {
-            timer?.cancel()
+            timer.cancel()
             isActive = false
         }
     }
@@ -59,7 +60,7 @@ struct BreathingView: View {
                     .headlineFont()
                 Spacer()
                 Image(systemName: "wind")
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
             }
             .accessibilityAddTraits(.isHeader)
 
@@ -81,14 +82,14 @@ struct BreathingView: View {
                             Spacer()
                             if selectedExercise.id == exercise.id {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.brandPurple)
+                                    .foregroundColor(.cmPrimary)
                             }
                         }
                         .padding(Spacing.md)
                         .background(
                             Group {
                                 if selectedExercise.id == exercise.id {
-                                    LinearGradient.brandSubtle
+                                    Color.selectedBg
                                 } else {
                                     Color.surfaceSecondary
                                 }
@@ -97,7 +98,7 @@ struct BreathingView: View {
                         .cornerRadius(Radius.md)
                         .overlay(
                             RoundedRectangle(cornerRadius: Radius.md)
-                                .stroke(selectedExercise.id == exercise.id ? Color.brandPurple : Color.clear, lineWidth: 1)
+                                .stroke(selectedExercise.id == exercise.id ? Color.cmPrimary : Color.clear, lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
@@ -107,7 +108,7 @@ struct BreathingView: View {
                 }
             }
 
-            GradientButton(title: "Begin \(selectedExercise.name)", icon: "play.fill") {
+            PrimaryButton(title: "Begin \(selectedExercise.name)", icon: "play.fill") {
                 startSession()
             }
             .accessibilityHint("Starts the breathing exercise")
@@ -199,14 +200,12 @@ struct BreathingView: View {
         phase = .inhale
         phaseTime = 0
 
-        timer = Task {
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 100_000_000)
-                await MainActor.run {
-                    phaseTime += 0.1
-                    checkPhaseTransition()
-                }
-            }
+        timer.start { [self] elapsed in
+            phaseTime += 0.1
+            checkPhaseTransition()
+            return phase == .idle ? .stop : .continue
+        } onComplete: {
+            // Session naturally ended or was cancelled
         }
     }
 
@@ -262,8 +261,7 @@ struct BreathingView: View {
     }
 
     private func endSession() {
-        timer?.cancel()
-        timer = nil
+        timer.cancel()
         isActive = false
         phase = .idle
         cycleCount = 0

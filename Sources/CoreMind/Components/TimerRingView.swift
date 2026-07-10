@@ -9,7 +9,7 @@ struct TimerRingView: View {
 
     init(
         progress: Double,
-        phaseColor: Color = .brandPurple,
+        phaseColor: Color = .cmPrimary,
         lineWidth: CGFloat = 6,
         size: CGFloat = 200,
         @ViewBuilder content: () -> some View = { EmptyView() }
@@ -23,16 +23,18 @@ struct TimerRingView: View {
 
     var body: some View {
         ZStack {
+            // Background ring
             Circle()
                 .stroke(lineWidth: lineWidth)
                 .opacity(0.1)
                 .foregroundColor(phaseColor)
 
+            // Progress ring
             Circle()
                 .trim(from: 0, to: min(progress, 1))
                 .stroke(
                     AngularGradient(
-                        colors: [.brandPurple, .brandBlue, phaseColor],
+                        colors: [.cmPrimary, .cmTeal, phaseColor],
                         center: .center,
                         startAngle: .degrees(-90),
                         endAngle: .degrees(270)
@@ -42,6 +44,7 @@ struct TimerRingView: View {
                 .rotationEffect(.degrees(-90))
                 .conditionalAnimation(.linear(duration: 0.3), value: progress)
 
+            // Center content
             if let content = content {
                 content
             }

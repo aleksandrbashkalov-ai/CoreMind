@@ -96,7 +96,7 @@ struct MenuBarView: View {
         HStack {
             Image(systemName: "brain.head.profile")
                 .font(.system(size: 16))
-                .foregroundColor(.brandPurple)
+                .foregroundColor(.cmPrimary)
 
             Text("CoreMind")
                 .headlineFont()
@@ -126,7 +126,7 @@ struct MenuBarView: View {
             HStack {
                 Image(systemName: "target")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundColor(.brandPurple)
+                    .foregroundColor(.cmPrimary)
                 Text("ONE THING")
                     .smallFont()
                     .fontWeight(.semibold)
@@ -216,7 +216,7 @@ struct MenuBarView: View {
             Spacer(minLength: Spacing.sm)
 
             if let action = nudge.actionTitle {
-                GradientButton(title: action, icon: nil) {
+                PrimaryButton(title: action, icon: nil) {
                     handleNudgeAction(nudge)
                 }
                 .accessibilityLabel(action)
@@ -246,12 +246,12 @@ struct MenuBarView: View {
         switch type {
         case .burnout: return .statusRed
         case .distraction: return .statusOrange
-        case .breakReminder: return .brandBlue
+        case .breakReminder: return .cmTeal
         case .movement: return .statusGreen
-        case .creativeBreak: return .brandPurple
-        case .focusSession: return .brandPurple
+        case .creativeBreak: return .cmPrimary
+        case .focusSession: return .cmPrimary
         case .breathing: return .statusTeal
-        case .deepWork: return .brandBlue
+        case .deepWork: return .cmTeal
         case .streak: return .statusOrange
         }
     }
@@ -282,7 +282,7 @@ struct MenuBarView: View {
             HStack(spacing: Spacing.xs) {
                 Image(systemName: isInMeeting ? "calendar.badge.exclamationmark" : "calendar")
                     .captionFont()
-                    .foregroundColor(isInMeeting ? .statusRed : .brandPurple)
+                    .foregroundColor(isInMeeting ? .statusRed : .cmPrimary)
 
                 if isInMeeting {
                     Text("In a meeting")
@@ -334,7 +334,7 @@ struct MenuBarView: View {
 
             ForEach([CoreMindView.checkIn, .breathe, .focus, .wisdom, .journal, .creativeBreak, .insights, .paywall], id: \.rawValue) { view in
                 Button(action: { currentView = view }) {
-                    FeatureRow(icon: view.icon, iconColor: .brandPurple) {
+                    FeatureRow(icon: view.icon, iconColor: .cmPrimary) {
                         Text(view.rawValue)
                             .bodyFont()
                     }
@@ -395,7 +395,7 @@ struct MenuBarView: View {
             .buttonStyle(.plain)
             .hoverEffect()
             .captionFont()
-            .foregroundColor(.brandPurple)
+            .foregroundColor(.cmPrimary)
             .accessibilityLabel("Settings")
             .accessibilityHint("Opens CoreMind settings window")
         }
